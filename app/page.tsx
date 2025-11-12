@@ -1,95 +1,82 @@
 import Image from "next/image";
+import Link from "next/link"; // 外部リンク用にLinkコンポーネントをインポート
 import styles from "./page.module.css";
-
-export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
+import { getteamList } from "./libs/microcms";
+// これは固定データとしてページ上部に表示します
+const teamData = {
+teamName: "Crazy Raccoon",
+officialSiteUrl: "https://crazyraccoon.jp/",
+division: {
+    name: "Street Fighter 6 部門",
+  },
+game: {
+title: "treet Fighter 6",
+description:
+"",
+imageUrl: "/apex-logo.png", // publicフォルダに画像を配置してください
+officialSiteUrl: "https://www.streetfighter.com/6/ja-jp",
+},
+};
+export default async function Home() {
+// メンバーリストを取得
+const teamlist = await getteamList({ limit: 12 }); // 表示件数を増やしたい場合はここを調整
+return (
+<div className={styles.container}>
+{/* チーム情報ヘッダー */}
+<header className={styles.teamHeader}>
+<h1 className={styles.teamName}>{teamData.teamName}</h1>
+<Link href={teamData.officialSiteUrl} target="_blank" rel="noopener noreferrer" className={styles.officialSiteLink}>
+公式サイト
+</Link>
+<div className={styles.divisionInfo}>
+<h2 className={styles.divisionName}>{teamData.division.name}</h2>
+</div>
+</header>
+{/* ゲーム情報セクション */}
+  <section className={styles.gameSection}>
+    <div className={styles.gameInfo}>
+      <div className={styles.gameLogo}>
         <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+          src={teamData.game.imageUrl}
+          alt={`${teamData.game.title} Logo`}
+          width={150} // ロゴのサイズに合わせて調整してください
+          height={100} // ロゴのサイズに合わせて調整してください
         />
       </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      <div className={styles.gameDescription}>
+        <h3 className={styles.gameTitle}>{teamData.game.title}</h3>
+        <p className={styles.description}>{teamData.game.description}</p>
+        <Link href={teamData.game.officialSiteUrl} target="_blank" rel="noopener noreferrer" className={styles.gameSiteLink}>
+          ゲーム公式サイトへ
+        </Link>
       </div>
-    </main>
-  );
+    </div>
+  </section>
+
+
+  {/* メンバー紹介セクション */}
+  <main className={styles.main}>
+    <h2 className={styles.sectionTitle}>MEMBERS</h2>
+    {teamlist.contents.length === 0 ? (
+      <p className={styles.empty}>メンバーが登録されていません。</p>
+    ) : (
+      <ul className={styles.memberGrid}>
+        {teamlist.contents.map((member) => (
+          <li key={member.id} className={styles.memberCard}>
+            <Image
+              src={member.image.url}
+              alt={member.name}
+              width={member.image.width}
+              height={member.image.height}
+              className={styles.memberImage}
+            />
+            <p className={styles.memberName}>{member.name}</p>
+          </li>
+        ))}
+      </ul>
+    )}
+  </main>
+
+</div>
+);
 }

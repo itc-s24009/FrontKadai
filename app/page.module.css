@@ -1,230 +1,197 @@
-.main {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6rem;
+/* page.module.css */
+
+/* --- 全体設定 --- */
+.container {
+  width: 100%;
   min-height: 100vh;
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+  color: #f5f5f5;
+  font-family: 'Helvetica Neue', 'Arial', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', sans-serif;
+}
+
+/* --- チーム情報ヘッダー --- */
+.teamHeader {
+  text-align: center;
+  margin-bottom: 4rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.teamName {
+  font-size: clamp(2.5rem, 8vw, 5rem); /* 画面幅に応じてサイズ変更 */
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 15px rgba(230, 0, 18, 0.7); /* 赤い光彩 */
+}
+
+.officialSiteLink {
+  display: inline-block;
+  margin-bottom: 2rem;
+  padding: 0.75rem 2.5rem;
+  background-color: #E60012; /* チームカラーの赤 */
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.officialSiteLink:hover {
+  background-color: #ff3347;
+  transform: scale(1.05);
+}
+
+.divisionInfo {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.divisionName {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #E60012; /* 赤 */
+  margin-bottom: 0.5rem;
+}
+
+/* --- ゲーム情報セクション --- */
+.gameSection {
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 3rem 2rem;
+  margin-bottom: 4rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.gameInfo {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap; /* スマホ表示で折り返す */
+  justify-content: center;
+}
+
+.gameLogo {
+  flex-shrink: 0;
+}
+
+.gameDescription {
+  flex-grow: 1;
+}
+
+.gameTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
 }
 
 .description {
-  display: inherit;
-  justify-content: inherit;
-  align-items: inherit;
-  font-size: 0.85rem;
-  max-width: var(--max-width);
-  width: 100%;
-  z-index: 2;
-  font-family: var(--font-mono);
+  line-height: 1.8;
+  color: #cccccc;
 }
 
-.description a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.description p {
-  position: relative;
-  margin: 0;
-  padding: 1rem;
-  background-color: rgba(var(--callout-rgb), 0.5);
-  border: 1px solid rgba(var(--callout-border-rgb), 0.3);
-  border-radius: var(--border-radius);
-}
-
-.code {
-  font-weight: 700;
-  font-family: var(--font-mono);
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(25%, auto));
-  max-width: 100%;
-  width: var(--max-width);
-}
-
-.card {
-  padding: 1rem 1.2rem;
-  border-radius: var(--border-radius);
-  background: rgba(var(--card-rgb), 0);
-  border: 1px solid rgba(var(--card-border-rgb), 0);
-  transition: background 200ms, border 200ms;
-}
-
-.card span {
+.gameSiteLink {
   display: inline-block;
-  transition: transform 200ms;
+  margin-top: 1rem;
+  color: #E60012; /* 赤 */
+  text-decoration: none;
+  font-weight: bold;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.3s ease;
 }
 
-.card h2 {
-  font-weight: 600;
-  margin-bottom: 0.7rem;
+.gameSiteLink:hover {
+  border-color: #E60012;
 }
 
-.card p {
-  margin: 0;
-  opacity: 0.6;
-  font-size: 0.9rem;
-  line-height: 1.5;
-  max-width: 30ch;
-  text-wrap: balance;
+/* --- メンバー紹介セクション --- */
+.main {
+  text-align: center;
 }
 
-.center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.sectionTitle {
+  font-size: clamp(2rem, 6vw, 3.5rem); /* 画面幅に応じてサイズ変更 */
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 3rem;
+  display: inline-block;
+  padding: 0 1rem;
   position: relative;
-  padding: 4rem 0;
 }
 
-.center::before {
-  background: var(--secondary-glow);
-  border-radius: 50%;
-  width: 480px;
-  height: 360px;
-  margin-left: -400px;
-}
-
-.center::after {
-  background: var(--primary-glow);
-  width: 240px;
-  height: 180px;
-  z-index: -1;
-}
-
-.center::before,
-.center::after {
-  content: "";
-  left: 50%;
+/* タイトルの前後に装飾線を追加 */
+.sectionTitle::before,
+.sectionTitle::after {
+  content: '';
   position: absolute;
-  filter: blur(45px);
-  transform: translateZ(0);
+  top: 50%;
+  width: 50px;
+  height: 2px;
+  background-color: #E60012;
 }
 
-.logo {
-  position: relative;
-}
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  .card:hover {
-    background: rgba(var(--card-rgb), 0.1);
-    border: 1px solid rgba(var(--card-border-rgb), 0.15);
-  }
-
-  .card:hover span {
-    transform: translateX(4px);
-  }
+.sectionTitle::before {
+  left: -60px;
 }
 
-@media (prefers-reduced-motion) {
-  .card:hover span {
-    transform: none;
-  }
+.sectionTitle::after {
+  right: -60px;
 }
 
-/* Mobile */
-@media (max-width: 700px) {
-  .content {
-    padding: 4rem;
-  }
+.memberGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
 
-  .grid {
-    grid-template-columns: 1fr;
-    margin-bottom: 120px;
-    max-width: 320px;
+.memberCard {
+  background-color: #222222;
+  border: 1px solid #444;
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.memberCard:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 30px rgba(230, 0, 18, 0.5); /* ホバー時に赤い影 */
+}
+
+.memberImage {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1; /* 正方形を維持 */
+  object-fit: cover;
+}
+
+.memberName {
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 1rem;
+  margin: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.empty {
+  font-size: 1.2rem;
+  color: #888;
+}
+
+/* --- レスポンシブ対応 --- */
+@media (max-width: 768px) {
+  .container {
+    padding: 2rem 1rem;
+  }
+  .gameInfo {
+    flex-direction: column;
     text-align: center;
-  }
-
-  .card {
-    padding: 1rem 2.5rem;
-  }
-
-  .card h2 {
-    margin-bottom: 0.5rem;
-  }
-
-  .center {
-    padding: 8rem 0 6rem;
-  }
-
-  .center::before {
-    transform: none;
-    height: 300px;
-  }
-
-  .description {
-    font-size: 0.8rem;
-  }
-
-  .description a {
-    padding: 1rem;
-  }
-
-  .description p,
-  .description div {
-    display: flex;
-    justify-content: center;
-    position: fixed;
-    width: 100%;
-  }
-
-  .description p {
-    align-items: center;
-    inset: 0 0 auto;
-    padding: 2rem 1rem 1.4rem;
-    border-radius: 0;
-    border: none;
-    border-bottom: 1px solid rgba(var(--callout-border-rgb), 0.25);
-    background: linear-gradient(
-      to bottom,
-      rgba(var(--background-start-rgb), 1),
-      rgba(var(--callout-rgb), 0.5)
-    );
-    background-clip: padding-box;
-    backdrop-filter: blur(24px);
-  }
-
-  .description div {
-    align-items: flex-end;
-    pointer-events: none;
-    inset: auto 0 0;
-    padding: 2rem;
-    height: 200px;
-    background: linear-gradient(
-      to bottom,
-      transparent 0%,
-      rgb(var(--background-end-rgb)) 40%
-    );
-    z-index: 1;
-  }
-}
-
-/* Tablet and Smaller Desktop */
-@media (min-width: 701px) and (max-width: 1120px) {
-  .grid {
-    grid-template-columns: repeat(2, 50%);
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  .vercelLogo {
-    filter: invert(1);
-  }
-
-  .logo {
-    filter: invert(1) drop-shadow(0 0 0.3rem #ffffff70);
-  }
-}
-
-@keyframes rotate {
-  from {
-    transform: rotate(360deg);
-  }
-  to {
-    transform: rotate(0deg);
   }
 }
