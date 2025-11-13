@@ -10,8 +10,12 @@ export type team = {
     name: string;
     usechara: string;
     career: string;
-    info: string;
-    image: MicroCMSImage
+  info: string;
+  x_url: string;
+  youtube_url: string;
+  twitch_url: string;
+  image: MicroCMSImage
+  
 } & MicroCMSListContent
 
 if (!process.env.MICROCMS_SERVICE_DOMAIN) {
@@ -28,10 +32,25 @@ const client = createClient({
 });
 
 
-export const getteamList = async (queries?: MicroCMSQueries) => {
+export const getteamList = async (
+  queries?: MicroCMSQueries
+) => {
   const listData = await client.getList<team>({
     endpoint: 'team-info',
     queries,
   });
   return listData;
 };
+
+export const getteammember = async (
+  contentId: string,
+  queries?: MicroCMSQueries
+) => {
+  const memberData = await client.get<team>({
+    endpoint: 'team-info',
+    contentId,
+    queries,
+  });
+  return memberData;
+};
+

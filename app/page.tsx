@@ -7,13 +7,14 @@ const teamData = {
 teamName: "Crazy Raccoon",
 officialSiteUrl: "https://crazyraccoon.jp/",
 division: {
-    name: "Street Fighter 6 部門",
+  name: "Street Fighter 6 部門",
+  Department_sf6Url: "https://crazyraccoon.jp/member-team/street-fighter/"
   },
 game: {
-title: "treet Fighter 6",
+title: "Street Fighter 6",
 description:
-"",
-imageUrl: "/apex-logo.png", // publicフォルダに画像を配置してください
+"s",
+imageUrl: "/sf6-logo.png", // publicフォルダに画像を配置してください
 officialSiteUrl: "https://www.streetfighter.com/6/ja-jp",
 },
 };
@@ -27,9 +28,12 @@ return (
 <h1 className={styles.teamName}>{teamData.teamName}</h1>
 <Link href={teamData.officialSiteUrl} target="_blank" rel="noopener noreferrer" className={styles.officialSiteLink}>
 公式サイト
-</Link>
-<div className={styles.divisionInfo}>
+      </Link>
+      <div className={styles.divisionInfo}>
+              <Link href={teamData.division.Department_sf6Url}>
+
 <h2 className={styles.divisionName}>{teamData.division.name}</h2>
+            </Link>
 </div>
 </header>
 {/* ゲーム情報セクション */}
@@ -39,8 +43,8 @@ return (
         <Image
           src={teamData.game.imageUrl}
           alt={`${teamData.game.title} Logo`}
-          width={150} // ロゴのサイズに合わせて調整してください
-          height={100} // ロゴのサイズに合わせて調整してください
+          width={200} // ロゴのサイズに合わせて調整してください
+          height={200} // ロゴのサイズに合わせて調整してください
         />
       </div>
       <div className={styles.gameDescription}>
@@ -61,17 +65,19 @@ return (
       <p className={styles.empty}>メンバーが登録されていません。</p>
     ) : (
       <ul className={styles.memberGrid}>
-        {teamlist.contents.map((member) => (
-          <li key={member.id} className={styles.memberCard}>
-            <Image
-              src={member.image.url}
-              alt={member.name}
-              width={member.image.width}
-              height={member.image.height}
-              className={styles.memberImage}
-            />
-            <p className={styles.memberName}>{member.name}</p>
-          </li>
+            {teamlist.contents.map((member) => (
+              <Link href={`/Member/${member.id}`}>
+                <li key={member.id} className={styles.memberCard}>
+                  <Image
+                    src={member.image.url}
+                    alt={member.name}
+                    width={member.image.width}
+                    height={member.image.height}
+                    className={styles.memberImage}
+                  />
+                  <p className={styles.memberName}>{member.name}</p>
+                </li>
+              </Link>
         ))}
       </ul>
     )}
