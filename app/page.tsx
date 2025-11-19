@@ -66,8 +66,8 @@ return (
     ) : (
       <ul className={styles.memberGrid}>
             {teamlist.contents.map((member) => (
+            <li key={member.id} className={styles.memberCard}>
               <Link href={`/Member/${member.id}`}>
-                <li key={member.id} className={styles.memberCard}>
                   <Image
                     src={member.image.url}
                     alt={member.name}
@@ -76,8 +76,8 @@ return (
                     className={styles.memberImage}
                   />
                   <p className={styles.memberName}>{member.name}</p>
+                  </Link>
                 </li>
-              </Link>
         ))}
       </ul>
     )}
