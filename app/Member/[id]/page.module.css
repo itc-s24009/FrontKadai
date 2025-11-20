@@ -1,227 +1,315 @@
-/* --- メンバー個人ページ STYLISH Ver. (ここから追記) --- */
-
-.profilePageContainer {
+/* --- 全体設定 & リセット --- */
+.pageWrapper {
   width: 100%;
   min-height: 100vh;
-  padding: 5rem 2rem;
-  background-color: #000000; /* 背景は真っ黒 */
+  background-color: #0a0a0a;
   color: #f5f5f5;
-  font-family: 'Helvetica Neue', 'Arial', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', sans-serif;
-  overflow-x: hidden; /* 横スクロールを防止 */
-}
-
-.profileGrid {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 4fr 6fr; /* 左:右 = 4:6 の比率 */
-  gap: 4rem;
-  align-items: center;
-}
-
-/* --- 左側：画像セクション --- */
-.profileImageContainer {
+  font-family: 'Oswald', 'Helvetica Neue', Arial, sans-serif;
   position: relative;
-  width: 100%;
-  padding-top: 100%; /* 正方形を維持するためのトリック */
+  overflow-x: hidden;
+  display: flex;
+  align-items: center; /* 画面中央にコンテンツを寄せる */
+  justify-content: center;
+  padding: 5rem 0;
 }
 
-.profileImage, .noImagePlaceholder {
-  position: absolute;
+/* --- アニメーション定義 (下からふわっと) --- */
+@keyframes fadeUpEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fadeInUp {
+  opacity: 0; /* 初期状態は消しておく */
+  animation: fadeUpEnter 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards;
+}
+
+
+/* --- 背景装飾 (メインページと統一) --- */
+.globalDecoration {
+  position: fixed;
   top: 0;
   left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 0;
+  padding: 0 5vw;
+  opacity: 0.3;
+}
+
+.vLine {
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.1), transparent);
+}
+
+/* 背景の巨大文字（隙間埋め兼デザイン） */
+.bgBigName {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-10deg);
+  width: 100%;
+  text-align: center;
+  font-size: 15vw;
+  font-weight: 900;
+  font-style: italic;
+  color: rgba(255,255,255,0.02); /* ほぼ透明 */
+  pointer-events: none;
+  z-index: 0;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+
+/* --- コンテンツレイアウト --- */
+.container {
+  width: 100%;
+  max-width: 1400px;
+  position: relative;
+  z-index: 1;
+  padding: 0 2rem;
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr; /* 画像側を少し狭く、情報側を広く */
+  gap: 5rem;
+  align-items: start; /* 上揃え */
+}
+
+
+/* --- 画像セクション --- */
+.imageSection {
+  position: relative;
+}
+
+/* スクロールしても画像が付いてくるようにする場合 */
+@media (min-width: 1024px) {
+  .imageSection {
+    position: sticky;
+    top: 4rem;
+  }
+}
+
+.imageFrame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/4; /* ポートレート比率 */
+  border: 1px solid rgba(255,255,255,0.1);
+  background: radial-gradient(circle at center, #1a1a1a, #0a0a0a);
+  /* 装飾：画像の背後にずらした枠線 */
+  box-shadow: -10px 10px 0px rgba(230, 0, 18, 0.1);
+}
+
+.imageFrame::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 100px;
+  height: 100px;
+  border-top: 3px solid #E60012;
+  border-right: 3px solid #E60012;
+  z-index: 2;
+}
+
+.profileImage {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* 画像を少し角ばった形に切り取る (遊び心) */
-  clip-path: polygon(0 0, 100% 0, 100% 90%, 90% 100%, 0 100%);
-}
-.noImagePlaceholder {
-    background: #111;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2rem;
-    font-weight: bold;
-    color: #444;
+  /* ちょっとかっこよくするフィルタ */
+  filter: sepia(20%) contrast(1.1);
 }
 
-/* デザイン用の装飾フレーム */
-.imageFrame {
+.decorOverlay {
   position: absolute;
-  top: -15px;
-  left: -15px;
+  bottom: 1rem;
+  left: -2rem; /* 枠からはみ出させる */
+  background: #E60012;
+  padding: 0.5rem 2rem;
+  color: #fff;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  font-size: 0.9rem;
+  z-index: 3;
+}
+
+.noImage {
   width: 100%;
   height: 100%;
-  border: 2px solid rgba(230, 0, 18, 0.5);
-  pointer-events: none; /* クリックを透過させる */
-  transition: all 0.4s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+  font-weight: bold;
 }
 
-.profileImageContainer:hover .imageFrame {
-  top: 0;
-  left: 0;
-  border-color: rgba(230, 0, 18, 1);
-  box-shadow: 0 0 25px rgba(230, 0, 18, 0.7);
-}
 
-/* --- 右側：情報セクション --- */
-.profileInfoContainer {
-  padding-left: 2rem;
-  border-left: 1px solid #333;
-}
-
-/* プレイヤー名 (グリッチエフェクト付き) */
-.playerName {
-  font-size: clamp(3rem, 7vw, 5rem);
-  font-weight: 900;
-  color: #ffffff;
-  margin: 0 0 2.5rem 0;
-  text-transform: uppercase;
-  line-height: 1.1;
-  position: relative;
-}
-.playerName span {
-  position: relative;
-  display: inline-block;
-}
-.playerName span::before,
-.playerName span::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #000;
-  overflow: hidden;
-}
-.playerName span::before {
-  left: 2px;
-  text-shadow: -1px 0 #E60012;
-  animation: glitch-anim-1 2.5s infinite linear alternate-reverse;
-}
-.playerName span::after {
-  left: -2px;
-  text-shadow: -1px 0 #00ffff, 2px 2px #E60012; /* 青緑を少し足してサイバー感を強調 */
-  animation: glitch-anim-2 3s infinite linear alternate-reverse;
-}
-
-@keyframes glitch-anim-1 {
-  0% { clip-path: polygon(0 2%, 100% 2%, 100% 5%, 0 5%); }
-  10% { clip-path: polygon(0 40%, 100% 40%, 100% 43%, 0 43%); }
-  40% { clip-path: polygon(0 62%, 100% 62%, 100% 68%, 0 68%); }
-  55% { clip-path: polygon(0 84%, 100% 84%, 100% 88%, 0 88%); }
-  100% { clip-path: polygon(0 93%, 100% 93%, 100% 99%, 0 99%); }
-}
-
-@keyframes glitch-anim-2 {
-  0% { clip-path: polygon(0 15%, 100% 15%, 100% 20%, 0 20%); }
-  25% { clip-path: polygon(0 35%, 100% 35%, 100% 40%, 0 40%); }
-  60% { clip-path: polygon(0 72%, 100% 72%, 100% 78%, 0 78%); }
-  100% { clip-path: polygon(0 50%, 100% 50%, 100% 55%, 0 55%); }
-}
-
-/* 各情報ブロック */
-.infoGrid {
+/* --- 情報セクション --- */
+.infoSection {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  margin-bottom: 3rem;
+  gap: 3rem;
 }
 
-.infoBlock {
-  position: relative;
-  padding: 1rem 1.5rem;
-  background-color: #0a0a0a;
-  border: 1px solid #222;
-  /* 左上に赤い装飾を追加 */
-  border-left: 3px solid #E60012;
-}
-
-.infoTitle {
-  font-size: 1.1rem;
-  font-weight: 700;
+.subLabel {
   color: #E60012;
-  margin: 0 0 0.8rem 0;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.2em;
+  font-weight: bold;
+  font-size: 0.9rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.playerName {
+  font-size: clamp(3rem, 6vw, 6rem); /* 画面幅に合わせて可変 */
+  line-height: 0.9;
+  margin: 0 0 1.5rem 0;
+  font-weight: 900;
+  font-style: italic;
   text-transform: uppercase;
+  color: #fff;
 }
 
-.infoText {
-  font-size: 1rem;
-  color: #cccccc;
-  line-height: 1.8;
-  white-space: pre-wrap; /* 改行を反映 */
-  margin: 0;
+.redSeparator {
+  width: 100px;
+  height: 4px;
+  background: #E60012;
 }
 
-/* SNSリンク */
-.socialLinksContainer {
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid #333;
+/* SNS Buttons */
+.socialGroup {
   display: flex;
-  gap: 1.5rem;
+  gap: 1rem;
   flex-wrap: wrap;
 }
 
-.socialLink {
+.socialBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: 1px solid #333;
+  color: #ccc;
+  padding: 0.8rem 1.5rem;
   text-decoration: none;
   font-weight: bold;
-  color: #f5f5f5;
-  padding: 0.7rem 1.5rem;
-  background-color: #111;
-  border: 1px solid #444;
-  position: relative;
-  transition: color 0.3s ease;
-  overflow: hidden; /* ::beforeを隠すため */
+  transition: all 0.3s;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
 }
 
-/* ホバー時に左から赤色が広がるエフェクト */
-.socialLink::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background-color: #E60012;
-  transition: left 0.3s ease;
-  z-index: -1;
-}
-
-.socialLink:hover {
-  color: #ffffff;
+.socialBtn:hover {
+  background: #E60012;
   border-color: #E60012;
+  color: #fff;
+  transform: translateY(-3px);
 }
 
-.socialLink:hover::before {
-  left: 0;
+.socialIcon {
+  font-weight: 900;
+}
+
+/* Details Grid */
+.detailsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 2.5rem;
+  border-left: 4px solid #E60012;
+}
+
+.detailCard {
+  /* 必要なら区切り線などを入れる */
+}
+
+.fullWidth {
+  /* 拡張用 */
+}
+
+.detailLabel {
+  font-size: 0.9rem;
+  color: #888;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid #333;
+  display: inline-block;
+  padding-bottom: 0.2rem;
+}
+
+.detailValue {
+  font-size: 2.5rem; /* キャラ名などは大きく */
+  font-weight: 800;
+  color: #fff;
+  text-transform: uppercase;
+  font-style: italic;
+  margin: 0;
+}
+
+.detailText {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #ddd;
+  font-family: 'Helvetica Neue', sans-serif; /* 読みやすさ重視 */
+  white-space: pre-wrap; /* 改行を反映 */
 }
 
 
-/* --- レスポンシブ対応 (個人ページ用) --- */
+/* --- 戻るボタンエリア --- */
+.footerNav {
+  margin-top: 2rem;
+}
+
+.backButton {
+  display: inline-block;
+  color: #666;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  padding-bottom: 5px;
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s;
+}
+
+.backButton:hover {
+  color: #fff;
+  border-color: #E60012;
+  padding-left: 10px; /* ちょっと右に動く */
+}
+
+
+/* --- スマホ対応 --- */
 @media (max-width: 900px) {
-  .profileGrid {
-    grid-template-columns: 1fr; /* 縦1列に */
+  .contentGrid {
+    grid-template-columns: 1fr; /* 縦並び */
     gap: 3rem;
   }
-  .profileImageContainer {
-    width: 250px;
-    height: 250px;
-    padding-top: 0;
-    margin: 0 auto;
+  
+  .container {
+    padding: 0 1.5rem;
   }
-  .profileInfoContainer {
-    padding-left: 0;
-    border-left: none;
-    text-align: center;
+
+  .playerName {
+    font-size: 3.5rem;
   }
-  .infoGrid {
-    text-align: left; /* テキスト部分は左寄せに戻す */
+
+  .detailsGrid {
+    padding: 1.5rem;
   }
-  .socialLinksContainer {
-    justify-content: center;
+
+  .decorOverlay {
+    left: 0; /* スマホでははみ出しをやめる */
   }
 }

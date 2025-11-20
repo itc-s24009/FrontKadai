@@ -1,0 +1,342 @@
+/* --- 全体リセット & ラッパー --- */
+.wrapper {
+  width: 100%;
+  /* 高さはコンテンツ量に応じて自然に伸ばす（100vh固定等はNG） */
+  min-height: 100vh;
+  position: relative;
+  
+  /* 背景色と文字色 */
+  background-color: #050505;
+  color: #eee;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+
+  /* 横方向のはみ出しのみ防ぐ */
+  overflow-x: hidden; 
+  
+  /* 縦方向 (y) のoverflowは指定しない or visible にしてスクロールさせる */
+  overflow-y: visible; 
+}
+
+/* --- 背景固定文字 --- */
+.bgTextLayer {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20vw;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.02);
+  pointer-events: none; /* 操作の邪魔をさせない */
+  white-space: nowrap;
+  z-index: 0;
+}
+
+/* --- SVG レイヤー --- */
+.svgLayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* これが最重要：スクロール操作を裏に通す */
+  z-index: 1; 
+}
+
+.pathBg {
+  stroke: #1a1a1a;
+  stroke-width: 12px;
+  fill: none;
+}
+
+.pathMain {
+  stroke: #E60012;
+  stroke-width: 6px;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 8px rgba(230, 0, 18, 0.8));
+  transition: stroke-dashoffset 0.1s linear;
+}
+
+/* --- ヘッダー --- */
+.header {
+  height: 80vh; 
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.headerContent h1 {
+  font-size: clamp(4rem, 10vw, 8rem);
+  font-weight: 900;
+  line-height: 0.9;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.headerContent p {
+  letter-spacing: 0.2em;
+  color: #888;
+  margin-top: 2rem;
+  animation: flash 2s infinite;
+}
+@keyframes flash {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+
+/* --- メインコンテンツ部 --- */
+.mainContent {
+  position: relative;
+  z-index: 10; 
+  padding-bottom: 10rem;
+}
+
+/* セクション単体 */
+.section {
+  position: relative;
+  width: 100%;
+  padding: 6rem 0; /* 上下の余白確保 */
+  
+  /* 最小高さを持ちつつ、中身が多ければ自動で伸びる */
+  min-height: 100vh;
+  display: flex;
+  align-items: center; /* 垂直中央配置 */
+  
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.section.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* レイアウト左右振り分け */
+/* Left: 左(5%)開始, Flexスタート(左寄せ) */
+.layoutLeft {
+  justify-content: flex-start;
+  padding-left: 5vw;
+}
+/* Right: 右(5%)開始, Flexエンド(右寄せ) */
+.layoutRight {
+  justify-content: flex-end;
+  padding-right: 5vw;
+}
+
+
+/* --- コネクタケーブル --- */
+.cableContainer {
+  position: absolute;
+  top: 50%;
+  height: 4px;
+  /* レイアウトによってはみ出ないように調整 */
+  width: 12vw; 
+  display: flex;
+  align-items: center;
+  z-index: 5;
+  pointer-events: none; /* 操作の邪魔防止 */
+}
+
+.layoutLeft .cableContainer {
+  right: 0; /* 右側からボックスへ */
+  justify-content: flex-end;
+}
+.layoutRight .cableContainer {
+  left: 0; /* 左側からボックスへ */
+  justify-content: flex-start;
+}
+
+.cableLine {
+  width: 0;
+  height: 100%;
+  background: #E60012;
+  box-shadow: 0 0 10px #E60012;
+  transition: width 0.8s ease 0.2s;
+}
+
+.section.active .cableLine { width: 100%; }
+
+.connectionDot {
+  width: 10px;
+  height: 10px;
+  background: #E60012;
+  border-radius: 50%;
+  box-shadow: 0 0 15px #E60012;
+  opacity: 0;
+  transition: opacity 0.5s 1s;
+}
+.section.active .connectionDot { opacity: 1; }
+
+
+/* --- 巨大情報ボックス --- */
+.infoBox {
+  width: 75vw;
+  background: rgba(20, 20, 20, 0.94);
+  /* 背景ぼかしが重い環境でのスクロール遅延を防ぐため控えめに */
+  backdrop-filter: blur(6px); 
+  border: 1px solid #333;
+  border-radius: 4px;
+  padding: 4rem;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+  position: relative;
+  transition: border-color 0.5s, box-shadow 0.5s;
+}
+
+.section.active .infoBox {
+  border-color: #666;
+  box-shadow: 0 15px 50px rgba(0,0,0,0.8), 0 0 20px rgba(230, 0, 18, 0.15) inset;
+}
+
+/* 接続ポート(飾り) */
+.layoutLeft .infoBox::after {
+  content: ''; position: absolute; right: -2px; top: 50%; transform: translateY(-50%);
+  width: 4px; height: 40px; background: #E60012;
+  opacity: 0; transition: opacity 0.5s 1s;
+  box-shadow: 0 0 15px #E60012;
+}
+.layoutRight .infoBox::before {
+  content: ''; position: absolute; left: -2px; top: 50%; transform: translateY(-50%);
+  width: 4px; height: 40px; background: #E60012;
+  opacity: 0; transition: opacity 0.5s 1s;
+  box-shadow: 0 0 15px #E60012;
+}
+.section.active .infoBox::after, .section.active .infoBox::before { opacity: 1; }
+
+
+/* --- 内部コンテンツ: ヘッダー --- */
+.boxHeader { margin-bottom: 3rem; }
+
+.label { display: block; font-weight: bold; color: #E60012; margin-bottom: 0.5rem; letter-spacing: 0.1em; }
+.title {
+  font-size: clamp(2.5rem, 6vw, 5rem); /* スマホ〜PC可変 */
+  font-weight: 900; line-height: 0.9; font-style: italic; margin: 0; text-transform: uppercase;
+}
+.headerSeparator { width: 100px; height: 4px; background: #E60012; margin: 1.5rem 0; }
+.subtitle { font-size: 1.2rem; color: #888; letter-spacing: 0.05em; }
+
+
+/* --- 内部コンテンツ: 記事グリッド (画像サイズ調整) --- */
+.articleGrid {
+  display: flex;
+  flex-wrap: wrap; /* 折り返し許可 */
+  gap: 3rem;
+  margin-bottom: 3rem;
+  align-items: flex-start;
+}
+
+/* テキスト部分 */
+.textColumn {
+  flex: 1 1 500px; /* 最小幅500px、余裕あれば伸びる */
+  min-width: 0;    /* 折り返し制御のため必須 */
+}
+.intro {
+  font-size: 1.3rem; font-weight: bold; margin-bottom: 1.5rem; line-height: 1.4; border-left: 4px solid #555; padding-left: 1rem;
+}
+.paragraph {
+  font-size: 1.05rem; line-height: 1.8; color: #ccc; margin-bottom: 1.5rem; text-align: justify;
+}
+
+/* Stats */
+.statsContainer {
+  display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #333;
+}
+.statItem { display: flex; flex-direction: column; }
+.statVal { font-size: 2rem; font-weight: 900; font-style: italic; color: #fff; line-height: 1; }
+.statKey { font-size: 0.8rem; color: #888; margin-top: 0.4rem; font-weight: bold; }
+
+/* ビジュアル部分（画像） */
+.visualColumn {
+  /* 幅固定ルール：PCなら幅400pxを確保し続ける */
+  flex: 0 0 400px; 
+  max-width: 100%;
+}
+
+.visualFrame {
+  width: 100%;
+  /* 少し縦長のポスター比率 */
+  aspect-ratio: 3/4;
+  background: #111;
+  border: 1px solid #444;
+  transform: rotate(2deg);
+  box-shadow: 10px 10px 0 rgba(0,0,0,0.5);
+}
+.visualInner {
+  width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #666;
+}
+
+
+/* --- フッター（ギャラリー含む） --- */
+.galleryFooter {
+  display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin-top: 2rem; border-top: 1px solid #333; padding-top: 1rem;
+}
+.galleryThumb {
+  width: 160px; aspect-ratio: 16/9; background: #111; border: 1px solid #333; display: flex; align-items: center; justify-content: center;
+}
+.dummyText, .dummyTextMin { font-weight: bold; }
+.readMore {
+  margin-left: auto; font-weight: bold; color: #E60012; cursor: pointer; border-bottom: 1px solid transparent; white-space: nowrap;
+}
+.readMore:hover { border-bottom-color: #E60012; }
+
+
+/* --- Footer (戻るボタン) --- */
+.footer {
+  padding: 6rem 0;
+  text-align: center;
+  z-index: 10; position: relative;
+}
+.backBtn {
+  color: #888; text-decoration: none; letter-spacing: 0.1em; border: 1px solid #444; padding: 1rem 3rem; transition: all 0.3s; background: #000;
+}
+.backBtn:hover {
+  background: #E60012; color: #fff; border-color: #E60012;
+}
+
+
+/* --- レスポンシブ --- */
+
+/* 1200px未満：2カラムをやめて縦並びに（画像を大きく表示） */
+@media (max-width: 1200px) {
+  .articleGrid {
+    flex-direction: column; /* 縦積み */
+  }
+  .textColumn { flex: auto; width: 100%; }
+  
+  .visualColumn {
+    flex: auto;
+    width: 100%; 
+    max-width: 600px; /* 画像の巨大化防止 */
+    margin: 0 auto;   /* 中央寄せ */
+  }
+  .visualFrame {
+    transform: none;    /* 回転戻す */
+    aspect-ratio: 16/9; /* 横長にして見やすく */
+  }
+}
+
+/* 900px未満（タブレット・スマホ） */
+@media (max-width: 900px) {
+  .layoutLeft, .layoutRight {
+    padding: 0;
+    justify-content: center;
+  }
+
+  .infoBox {
+    width: 94vw; /* 画面幅ほぼいっぱい */
+    padding: 2rem 1.5rem; /* パディング削減 */
+  }
+
+  /* 線は隠す */
+  .cableContainer { display: none; }
+
+  .header h1 { font-size: 3rem; }
+  
+  .title { font-size: 2.5rem; }
+}

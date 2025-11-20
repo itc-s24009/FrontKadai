@@ -1,197 +1,446 @@
 /* page.module.css */
 
-/* --- 全体設定 --- */
-.container {
+/* --- 変数・リセット --- */
+.wrapper {
   width: 100%;
-  min-height: 100vh;
-  padding: 4rem 2rem;
-  background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
-  color: #f5f5f5;
-  font-family: 'Helvetica Neue', 'Arial', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', sans-serif;
-}
-
-/* --- チーム情報ヘッダー --- */
-.teamHeader {
-  text-align: center;
-  margin-bottom: 4rem;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.teamName {
-  font-size: clamp(2.5rem, 8vw, 5rem); /* 画面幅に応じてサイズ変更 */
-  font-weight: 900;
-  color: #ffffff;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: 1rem;
-  text-shadow: 0 0 15px rgba(230, 0, 18, 0.7); /* 赤い光彩 */
-}
-
-.officialSiteLink {
-  display: inline-block;
-  margin-bottom: 2rem;
-  padding: 0.75rem 2.5rem;
-  background-color: #E60012; /* チームカラーの赤 */
-  color: #ffffff;
-  text-decoration: none;
-  font-weight: bold;
-  border-radius: 5px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.officialSiteLink:hover {
-  background-color: #ff3347;
-  transform: scale(1.05);
-}
-
-.divisionInfo {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.divisionName {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #E60012; /* 赤 */
-  margin-bottom: 0.5rem;
-}
-
-/* --- ゲーム情報セクション --- */
-.gameSection {
-  background-color: rgba(0, 0, 0, 0.3);
-  padding: 3rem 2rem;
-  margin-bottom: 4rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-}
-
-.gameInfo {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  flex-wrap: wrap; /* スマホ表示で折り返す */
-  justify-content: center;
-}
-
-.gameLogo {
-  flex-shrink: 0;
-}
-
-.gameDescription {
-  flex-grow: 1;
-}
-
-.gameTitle {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #ffffff;
-  margin-bottom: 0.5rem;
-}
-
-.description {
-  line-height: 1.8;
-  color: #cccccc;
-}
-
-.gameSiteLink {
-  display: inline-block;
-  margin-top: 1rem;
-  color: #E60012; /* 赤 */
-  text-decoration: none;
-  font-weight: bold;
-  border-bottom: 2px solid transparent;
-  transition: border-color 0.3s ease;
-}
-
-.gameSiteLink:hover {
-  border-color: #E60012;
-}
-
-/* --- メンバー紹介セクション --- */
-.main {
-  text-align: center;
-}
-
-.sectionTitle {
-  font-size: clamp(2rem, 6vw, 3.5rem); /* 画面幅に応じてサイズ変更 */
-  font-weight: 700;
-  color: #ffffff;
-  margin-bottom: 3rem;
-  display: inline-block;
-  padding: 0 1rem;
+  background-color: #0a0a0a;
+  color: #f0f0f0;
+  font-family: 'Oswald', 'Helvetica Neue', 'Arial', sans-serif;
+  overflow-x: hidden;
   position: relative;
 }
 
-/* タイトルの前後に装飾線を追加 */
-.sectionTitle::before,
-.sectionTitle::after {
+/* --- 背景アニメーション (動く縦ライン) --- */
+.globalDecoration {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 0;
+  padding: 0 5vw;
+  opacity: 0.4;
+}
+
+.vLine {
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.1), transparent);
+  /* 線自体を少し動かす */
+  animation: linePulse 4s infinite;
+}
+
+.vLine:nth-child(2) { animation-delay: 1s; }
+.vLine:nth-child(3) { animation-delay: 2.5s; }
+.vLine:nth-child(4) { animation-delay: 0.5s; }
+
+@keyframes linePulse {
+  0% { transform: scaleY(0.8); opacity: 0.2; }
+  50% { transform: scaleY(1.1); opacity: 0.5; }
+  100% { transform: scaleY(0.8); opacity: 0.2; }
+}
+
+
+/* --- ヒーローセクション (高さを最大に) --- */
+.heroSection {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* 画面いっぱいに変更 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  /* 下部へのグラデーションで続きを予感させる */
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 80%, #0a0a0a 100%);
+}
+
+.heroContent {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  /* 初期アニメーション */
+  animation: heroEntry 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes heroEntry {
+  0% { opacity: 0; transform: scale(1.1) translateY(50px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.heroTeamName {
+  font-size: clamp(4rem, 13vw, 14rem); /* さらに巨大化 */
+  font-weight: 900;
+  line-height: 0.85;
+  margin: 0;
+  font-style: italic;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.heroTeamName span {
+  color: transparent;
+  -webkit-text-stroke: 2px #E60012; /* 文字の中抜き + 赤い縁取り */
+  position: relative;
+  display: inline-block;
+}
+
+/* 揺らぐ赤い光の演出 */
+.heroTeamName span::after {
+  content: 'RACCOON';
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #E60012;
+  opacity: 0.5;
+  filter: blur(20px);
+  z-index: -1;
+  animation: glowPulse 3s infinite alternate;
+}
+@keyframes glowPulse {
+  from { opacity: 0.2; filter: blur(10px); }
+  to { opacity: 0.7; filter: blur(30px); }
+}
+
+.heroDivisionWrapper {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.divisionName {
+  font-size: 1.5rem;
+  letter-spacing: 0.5em;
+  color: #888;
+}
+
+/* スクロールダウン表示 */
+.scrollIndicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #666;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  animation: fadeOutUp 2s infinite;
+}
+.scrollLine {
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(to bottom, #E60012, transparent);
+  margin-bottom: 10px;
+}
+
+@keyframes fadeOutUp {
+  0% { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 0; transform: translate(-50%, 20px); }
+}
+
+
+/* --- 共通: スクロール連動アニメーション用のクラス --- */
+.fadeUpTarget {
+  opacity: 0;
+  transform: translateY(60px);
+  transition: opacity 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000), transform 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+}
+
+.fadeUpTarget.inView {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --- セクション基本設定 --- */
+.sectionFullWidth {
+  position: relative;
+  width: 100%;
+  padding: 8rem 5vw;
+  z-index: 1;
+}
+
+/* 背景に流れる巨大文字（Marquee） */
+.marqueeWrapper {
+  position: absolute;
+  top: 10%;
+  left: -10%;
+  width: 120%;
+  opacity: 0.03;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  white-space: nowrap;
+  transform: rotate(-5deg); /* 斜めに配置 */
+}
+
+.marqueeText {
+  font-size: 12rem;
+  font-weight: 900;
+  font-family: sans-serif;
+  display: inline-block;
+  animation: marquee 30s linear infinite;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+
+/* --- Game Section --- */
+.gameContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.gameContent {
+  display: flex;
+  align-items: center;
+  gap: 5rem;
+}
+
+.gameImageWrapper {
+  flex: 0 0 30%;
+}
+
+.gameLogo {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 30px rgba(255,255,255,0.1));
+}
+
+.gameInfo {
+  flex: 1;
+}
+
+.sectionLabel {
+  display: inline-block;
+  color: #E60012;
+  font-weight: bold;
+  letter-spacing: 0.2em;
+  margin-bottom: 1rem;
+  position: relative;
+  padding-left: 1.5rem;
+}
+.sectionLabel::before {
   content: '';
   position: absolute;
+  left: 0;
   top: 50%;
-  width: 50px;
+  width: 1rem;
   height: 2px;
-  background-color: #E60012;
+  background: #E60012;
 }
 
-.sectionTitle::before {
-  left: -60px;
+.gameTitle {
+  font-size: 4rem;
+  font-weight: 900;
+  font-style: italic;
+  line-height: 0.9;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
 }
 
-.sectionTitle::after {
-  right: -60px;
+.description {
+  color: #ccc;
+  line-height: 1.8;
+  margin-bottom: 3rem;
+  max-width: 600px;
+  font-size: 1.1rem;
+  font-family: 'Helvetica Neue', sans-serif; /* 本文は読みやすく */
+}
+
+/* --- About Team --- */
+.bgDarkWrapper {
+  position: relative;
+  /* 枠ではなく「塗り」で区切りを作る */
+}
+/* 背景の斜めシェイプ */
+.bgShape {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.02);
+  clip-path: polygon(20% 0%, 100% 0, 100% 100%, 0% 100%);
+  z-index: -1;
+}
+
+.aboutContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.aboutText {
+  max-width: 600px;
+}
+
+.aboutBigTitle {
+  font-size: 5rem;
+  font-weight: 900;
+  line-height: 0.8;
+  margin-bottom: 1.5rem;
+  color: #fff;
+}
+.textStroke {
+  -webkit-text-stroke: 1px #fff;
+  color: transparent;
+}
+
+.aboutSub {
+  color: #E60012;
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+
+/* --- Members --- */
+.membersContainer {
+  max-width: 1600px;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .memberGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  list-style: none;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-top: 4rem;
   padding: 0;
-  margin: 0;
+  list-style: none;
 }
 
+/* 個々のカードにもアニメーション用遅延をつける */
 .memberCard {
-  background-color: #222222;
-  border: 1px solid #444;
-  border-radius: 8px;
+  background-color: #111;
+  border-top: 1px solid #333;
+  transition: transform 0.3s;
   overflow: hidden;
-  text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 .memberCard:hover {
   transform: translateY(-10px);
-  box-shadow: 0 10px 30px rgba(230, 0, 18, 0.5); /* ホバー時に赤い影 */
+  border-top-color: #E60012;
+}
+
+.memberImageWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1.2;
 }
 
 .memberImage {
   width: 100%;
-  height: auto;
-  aspect-ratio: 1 / 1; /* 正方形を維持 */
+  height: 100%;
   object-fit: cover;
+  filter: grayscale(100%);
+  transition: filter 0.5s, transform 0.5s;
+}
+.memberCard:hover .memberImage {
+  filter: grayscale(0%);
+  transform: scale(1.05);
+}
+
+.memberNameOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+  text-align: left;
 }
 
 .memberName {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: bold;
-  padding: 1rem;
+  color: #fff;
   margin: 0;
-  background-color: rgba(0, 0, 0, 0.4);
+  text-transform: uppercase;
+  transform: translateY(10px);
+  opacity: 0.8;
+  transition: all 0.3s;
+}
+.memberCard:hover .memberName {
+  transform: translateY(0);
+  opacity: 1;
+  color: #E60012;
 }
 
-.empty {
-  font-size: 1.2rem;
-  color: #888;
+/* --- 共通ボタン --- */
+.btnStyler {
+  display: inline-block;
+  padding: 1rem 2.5rem;
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.9rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+  z-index: 1;
+  background: rgba(0,0,0,0.5);
+}
+.btnStyler::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  background: #E60012;
+  z-index: -1;
+  transition: height 0.3s ease;
+}
+.btnStyler:hover::after {
+  height: 100%;
+}
+.btnStyler:hover {
+  border-color: #E60012;
 }
 
-/* --- レスポンシブ対応 --- */
+
+/* --- Footer --- */
+.footer {
+  padding: 4rem 0;
+  text-align: center;
+  border-top: 1px solid #222;
+  color: #555;
+}
+
+
+/* --- Responsive --- */
 @media (max-width: 768px) {
-  .container {
-    padding: 2rem 1rem;
+  .gameContent {
+    flex-direction: column;
+    text-align: center;
+    gap: 2rem;
   }
-  .gameInfo {
+  
+  .aboutContainer {
     flex-direction: column;
     text-align: center;
   }
+
+  .heroTeamName {
+    font-size: 4rem; /* スマホでも大きく */
+  }
+  
+  .sectionLabel {
+    padding-left: 0;
+  }
+  .sectionLabel::before { display: none; }
 }
