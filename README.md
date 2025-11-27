@@ -21,7 +21,7 @@ Next.js (App Router) を使い、データはmicroCMSで管理しています。
   - メンバーの名前、写真、プロフィールなどの情報はすべてmicroCMSからAPI経由で取得して表示します。
 
 
-## 🛠 使用技術
+## 使用技術
 
 - **Framework**: Next.js (App Router / TypeScript / ESLint)
 - **Style**: globals.css / CSS Modules
